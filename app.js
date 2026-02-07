@@ -1171,7 +1171,7 @@ function forceServiceWorkerUpdate() {
    ============================================= */
 function checkServiceWorkerSupport() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' })
+    navigator.serviceWorker.register('sw.js?v=20260207_02', { updateViaCache: 'none' })
       .then(reg => {
         console.log('[PWA] Service Worker registrado:', reg.scope);
 

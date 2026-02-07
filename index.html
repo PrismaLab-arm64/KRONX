@@ -1,237 +1,124 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#000000">
-    <meta name="description" content="ECHO_OFF - Comunicacion P2P cifrada estilo Java Console">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>ECHO_OFF v2.8.0</title>
-    <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="theme.clean.css">
-    <link rel="icon" type="image/png" href="icon-app.png">
-    <link rel="apple-touch-icon" href="icon-app.png">
-    
-    <!-- CRITICAL: Clean old Service Worker BEFORE loading anything -->
-    <script>
-    (function() {
-        console.log('[CLEANUP] Iniciando limpieza de Service Worker antiguo...');
-        
-        if ('serviceWorker' in navigator) {
-            // Unregister ALL service workers immediately
-            navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                if (registrations.length > 0) {
-                    console.log('[CLEANUP] Encontrados', registrations.length, 'service workers. Eliminando...');
-                    
-                    registrations.forEach(function(registration) {
-                        registration.unregister().then(function(success) {
-                            if (success) {
-                                console.log('[CLEANUP] Service Worker eliminado:', registration.scope);
-                            }
-                        });
-                    });
-                }
-            });
-            
-            // Clear ALL caches
-            if ('caches' in window) {
-                caches.keys().then(function(cacheNames) {
-                    if (cacheNames.length > 0) {
-                        console.log('[CLEANUP] Encontrados', cacheNames.length, 'caches. Eliminando...');
-                        
-                        cacheNames.forEach(function(cacheName) {
-                            caches.delete(cacheName).then(function(success) {
-                                if (success) {
-                                    console.log('[CLEANUP] Cache eliminado:', cacheName);
-                                }
-                            });
-                        });
-                    }
-                });
-            }
-        }
-        
-        console.log('[CLEANUP] Limpieza completada. Cargando v2.7.0...');
-    })();
-    </script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+  <title>ECHO_OFF</title>
+  <meta name="description" content="ECHO_OFF PWA - Secure Communications System" />
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#e9e9e9" />
+  <meta name="color-scheme" content="light dark" />
+
+  <!-- Icons (si existen, no afecta si faltan) -->
+  <link rel="icon" href="icon-192.png" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+
+  <!-- ===============================
+       CACHE-BUSTING (IMPORTANTE)
+       Cambia V= cada vez que quieras forzar actualización visual
+       Recomiendo: usar fecha/hora corta
+       =============================== -->
+  <link rel="stylesheet" href="style.css?v=20260207_01" />
+  <link rel="stylesheet" href="theme.clean.css?v=20260207_01" />
+
+  <!-- Fallback visible si por algún motivo no carga el CSS -->
+  <style>
+    /* Esto NO toca tu UI, solo evita pantalla blanca en caso extremo */
+    html, body { height: 100%; margin: 0; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+  </style>
 </head>
+
 <body>
-    <!-- PWA Install Prompt -->
-    <div id="install-prompt" class="install-prompt hidden">
-        <div class="dos-window">
-            <div class="dos-title-bar">
-                <span>INSTALAR APLICACION</span>
-                <button class="dos-close" id="btn-cancel-install">X</button>
-            </div>
-            <div class="dos-content">
-                <p>Instalar ECHO_OFF en este equipo?</p>
-                <p>La aplicacion funcionara sin conexion</p>
-                <div class="dos-buttons">
-                    <button id="btn-install" class="dos-button">[ SI ]</button>
-                    <button class="dos-button">[ NO ]</button>
-                </div>
-            </div>
-        </div>
-    </div>
+  <!-- =========================================================
+       PEGA AQUÍ TU <BODY> ACTUAL (tal cual lo tienes hoy)
+       - Copia desde tu index.html actual: todo lo que está dentro de <body>...</body>
+       - Pégalo aquí reemplazando este comentario.
+       ========================================================= -->
 
-    <!-- Boot Screen -->
-    <div id="splash-screen" class="boot-screen active">
-        <div class="boot-content">
-            <pre class="boot-text">
-ECHO_OFF Secure Communications System v2.8.0
-Copyright (C) 2026 CyberSec Division
+  <!-- EJEMPLO (NO lo uses si tu app ya tiene body):
+  <div id="app" class="app"></div>
+  -->
 
-Initializing P2P Protocol...      [OK]
-Loading Encryption Module...      [OK]
-Starting PeerJS Service...        [OK]
+  <!-- =========================================================
+       SW REGISTRATION + FORCE UPDATE (SEGURO / IDEMPOTENTE)
+       - No rompe tu app.
+       - Si ya tienes registro de SW en app.js, esto NO interfiere:
+         solo intenta update y enlaza el botón "Forzar Actualización".
+       ========================================================= -->
+  <script>
+    (function () {
+      // 1) Registrar Service Worker (si existe)
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', async () => {
+          try {
+            const reg = await navigator.serviceWorker.register('./sw.js');
+            // Intentar traer update apenas cargue (no rompe)
+            try { await reg.update(); } catch (e) {}
+          } catch (e) {
+            // Silencioso: no afectamos funcionalidad si SW falla.
+          }
+        });
+      }
 
-></pre>
-            <span class="cursor-blink">_</span>
-        </div>
-    </div>
-    
-    <!-- Main Terminal -->
-    <div id="terminal" class="dos-terminal hidden">
+      // 2) Enlazar botón "Forzar Actualización" (si existe en tu UI)
+      //    IMPORTANTE: NO asumimos IDs exactas: buscamos por texto.
+      function findForceUpdateButton() {
+        const buttons = Array.from(document.querySelectorAll('button, a, div'));
+        const targetText = 'forzar actualización';
+        return buttons.find(el => (el.textContent || '').trim().toLowerCase().includes(targetText));
+      }
 
-        <!-- Welcome Screen -->
-        <div id="welcome-screen" class="screen active">
-            <div class="welcome-header">
-                <p class="title-main">ECHO_OFF</p>
-                <p class="title-subtitle">Sistema de Comunicacion Segura</p>
-            </div>
-            
-            <div class="welcome-info">
-                <p>Version: 2.9.0</p>
-                <p>Encriptacion End-to-End | Sin Almacenamiento</p>
-            </div>
+      async function forceUpdateNow() {
+        try {
+          if (!('serviceWorker' in navigator)) { location.reload(); return; }
 
-            <p class="prompt-text">> Seleccione una opcion:</p>
-            
-            <div class="dos-button-container">
-                <button id="btn-create-room" class="dos-button primary">
-                    > Crear Sala
-                </button>
-                <button id="btn-join-room" class="dos-button primary">
-                    > Unirse
-                </button>
-            </div>
-            
-            <div class="update-section">
-                <button id="btn-force-update" class="dos-button-small" style="margin-top: 20px;">
-                    [ Forzar Actualización ]
-                </button>
-            </div>
-        </div>
+          const reg = await navigator.serviceWorker.getRegistration();
+          if (reg) {
+            try { await reg.update(); } catch (e) {}
 
-        <!-- Room Creation Screen -->
-        <div id="create-room-screen" class="screen">
-            <div class="screen-header">
-                <p class="screen-title">Crear Nueva Sala</p>
-            </div>
+            // Si hay SW esperando, lo activamos ya
+            if (reg.waiting) {
+              try { reg.waiting.postMessage({ type: 'SKIP_WAITING' }); } catch (e) {}
+            }
 
-            <p>> Generando ID unico de sala...</p>
-            <p></p>
-            <p>ID DE SALA GENERADO:</p>
-            
-            <div class="dos-id-display">
-                <input type="text" id="room-id" readonly class="dos-input-id" />
-            </div>
-            
-            <div class="dos-button-row">
-                <button id="btn-copy-id" class="dos-button-small">Copiar</button>
-                <button id="btn-regenerate-id" class="dos-button-small">Regenerar</button>
-            </div>
+            // Si hay controlador activo, pedimos limpieza (tu SW lo soporta)
+            if (navigator.serviceWorker.controller) {
+              try { navigator.serviceWorker.controller.postMessage({ type: 'CLEAR_CACHES' }); } catch (e) {}
+            }
+          }
 
-            <p></p>
-            <p class="warning-text">⚠ Comparta solo con usuarios de confianza</p>
-            <p>> Esperando conexion...</p>
-            <p></p>
-            
-            <button id="btn-back-from-create" class="dos-button">
-                > Volver
-            </button>
-        </div>
+          // Recarga “dura”
+          location.reload();
+        } catch (e) {
+          location.reload();
+        }
+      }
 
-        <!-- Room Join Screen -->
-        <div id="join-room-screen" class="screen">
-            <div class="screen-header">
-                <p class="screen-title">Unirse a Sala</p>
-            </div>
+      // Esperar a que tu UI esté montada (por app.js) y luego enganchar el botón
+      window.addEventListener('load', () => {
+        let tries = 0;
+        const t = setInterval(() => {
+          tries++;
+          const btn = findForceUpdateButton();
+          if (btn && !btn.dataset.forceUpdateBound) {
+            btn.dataset.forceUpdateBound = '1';
+            btn.addEventListener('click', (ev) => {
+              ev.preventDefault();
+              forceUpdateNow();
+            }, { passive: false });
+            clearInterval(t);
+          }
+          if (tries > 40) clearInterval(t); // ~10s, no insistimos más
+        }, 250);
+      });
+    })();
+  </script>
 
-            <p>> Ingrese el ID:</p>
-            
-            <div class="dos-input-group">
-                <input type="text" id="peer-id-input" placeholder="ECHO_XXXXXXXXXX" class="dos-input" />
-            </div>
-
-            <div class="dos-button-group">
-                <button id="btn-connect" class="dos-button primary">
-                    > Conectar
-                </button>
-                <button id="btn-back-from-join" class="dos-button">
-                    > Volver
-                </button>
-            </div>
-        </div>
-
-        <!-- Chat Screen -->
-        <div id="chat-screen" class="screen">
-            <div class="dos-chat-header">
-                <div class="chat-header-info">
-                    <p class="chat-title">
-                        <span id="canal-seguro-text">CANAL SEGURO</span> | PEER: <span id="chat-peer-id" class="peer-id"></span>
-                        <span id="sas-display" class="sas-display"></span>
-                    </p>
-                </div>
-                <button id="btn-disconnect" class="dos-button-close">> Desconectar</button>
-            </div>
-            
-            <!-- Security Simulation Layer -->
-            <div id="security-layer" class="security-layer">
-                <div id="vpn-animation" class="vpn-animation">
-                    <span id="vpn-location" class="vpn-location"></span>
-                    <span id="vpn-hash" class="vpn-hash"></span>
-                    <span id="vpn-countdown" class="vpn-countdown"></span>
-                </div>
-            </div>
-            
-            <!-- Remote Encryption Indicator -->
-            <div id="encryption-indicator" class="encryption-indicator hidden">
-                <div class="encryption-header">⚡ enc</div>
-                <div id="encryption-matrix-1" class="encryption-matrix"></div>
-            </div>
-            
-            <div id="messages-container" class="dos-messages"></div>
-            
-            <!-- Advanced Features Bar -->
-            <div class="advanced-features-bar">
-                <button id="btn-upload-file" class="feature-btn" title="Enviar archivo">
-                    <span class="btn-icon">📎</span> UPLOAD FILE
-                </button>
-                <button id="btn-record" class="feature-btn record-btn" title="Mantener presionado para grabar">
-                    <span class="btn-icon">🎤</span> REC
-                </button>
-                <input type="file" id="file-input" style="display: none;" />
-            </div>
-            
-            <div class="dos-input-bar">
-                <span class="prompt">></span>
-                <input 
-                    type="text" 
-                    id="message-input" 
-                    class="dos-message-input"
-                    placeholder="Escriba su mensaje..."
-                    autocomplete="off"
-                />
-                <button id="btn-send" class="dos-send-button">Enviar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- PeerJS CDN -->
-    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
-    <script src="app.js"></script>
+  <!-- Tu JS principal (si ya lo tenías, déjalo igual) -->
+  <script src="app.js?v=20260207_01"></script>
 </body>
 </html>

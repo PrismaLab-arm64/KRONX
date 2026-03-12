@@ -10,7 +10,7 @@
 'use strict';
 
 // 🔁 CAMBIA ESTO cada vez que subas cambios importantes de UI
-const SW_VERSION = 'echo_off_sw_2026-03-12_vFINAL';
+const SW_VERSION = 'echo_off_sw_2026-03-12_vFINAL2';
 
 // Nombres de caché versionados
 const CACHE_STATIC = `${SW_VERSION}::static`;
@@ -22,10 +22,10 @@ const APP_SHELL = [
   './index.html',
   './style.css',
   './app.js',
+  './peerjs.min.js',
   './manifest.json',
   './icon-192.png',
   './icon-512.png',
-  './icon-app.png',
 
   // ✅ si ya lo agregaste para el rediseño:
   './theme.clean.css',

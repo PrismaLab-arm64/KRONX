@@ -51,16 +51,22 @@ function logDelta(msg) {
 /* =============================================
    INITIALIZATION
    ============================================= */
-document.addEventListener('DOMContentLoaded', () => {
+function initDelta() {
   logDelta("Delta V5 Online. Purgando sistemas previos...");
   try {
     setupEventListeners();
     initSplashScreen();
     initSecurity();
   } catch (err) {
-    logDelta("Error: " + err.message);
+    logDelta("Error de arranque: " + err.message);
   }
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initDelta);
+} else {
+  initDelta();
+}
 
 function initSplashScreen() {
   setTimeout(() => {

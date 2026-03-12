@@ -1,92 +1,79 @@
-[README.md](https://github.com/user-attachments/files/25943783/README.md)
 <div align="center">
+  <img src="icon-192.png" alt="Logotipo de ECHO_OFF" width="150" style="border-radius: 20px; box-shadow: 0 0 20px rgba(0, 132, 255, 0.4);">
 
-# 👁️ ECHO_OFF : THE GENESIS PROTOCOL
-**`[ SYSTEM OVERRIDE // PROTOCOLO ZERO-TRACE INCIADO ]`**
+  # 🔮 **ECHO_OFF v3.5 "The Merlin Protocol"** 🔮
+  ### *Desaparece en la niebla. Deja que el sistema te olvide.*
 
-*We are Legion. Lo que se compila en las sombras, permanece en la RAM.*
-
-![Version](https://img.shields.io/badge/Build-3.0.0_Codex.Anon-000000?style=for-the-badge&logo=matrix)
-![Status](https://img.shields.io/badge/Uplink-Activo__Ghost-0084ff?style=for-the-badge)
-![Privacy](https://img.shields.io/badge/Encryption-Maximum_Hex-0084ff?style=for-the-badge)
-
-🔥 **[ SECURE SHELL INITIALIZED (LIVE APP) ](https://prismalab-arm64.github.io/ECHO_OFF/)** 🔥
-
+  [![Estado: INDETECTABLE](https://img.shields.io/badge/Estado-INDETECTABLE-00C6FF.svg?style=for-the-badge&logo=appveyor)](https://prismalab-arm64.github.io/ECHO_OFF/)
+  [![Cifrado: EXTREMO A EXTREMO](https://img.shields.io/badge/Cifrado-E2EE-0084FF.svg?style=for-the-badge&logo=lock)](https://prismalab-arm64.github.io/ECHO_OFF/)
+  [![Conexión: PEER-TO-PEER](https://img.shields.io/badge/Red-P2P_Directa-31a24c.svg?style=for-the-badge&logo=webrtc)](https://prismalab-arm64.github.io/ECHO_OFF/)
+  [![Deploy: GITHUB PAGES](https://img.shields.io/badge/Lanzamiento-VIVO_AHORA-fa383e.svg?style=for-the-badge)](https://prismalab-arm64.github.io/ECHO_OFF/)
 </div>
 
----
+<br>
 
-## 📜 El Oráculo de Silicio
-
-Saludos, ciudadanos del ciberespacio. Has tropezado con **ECHO_OFF**, no con una simple "app", sino con un constructo algorítmico, un grimorio compilado en Hexadecimal forjado en las profundidades de la *Darknet* para garantizar tu derecho inviolable: **la invisibilidad absoluta.**
-
-En una época donde los servidores corporativos rastrean hasta tu último latido, hemos erradicado al intermediario. Esto es **Ultra-Programación** fusionada con la antigua magia de Merlín: una arquitectura P2P (Peer-to-Peer) pura. Eres tú y el vacío. Ningún servidor espía, ninguna base de datos almacena tus *logs*. Solo almas y máquinas conectándose a través del éter digital con la fuerza inquebrantable del cifrado militar E2E.
-
-> *"Tres veces gira la llave de silicio, tres veces pulsa ESC. Lo que fue invocado, al recolector de basura regresará." — El Peregrino Digital*
+<h2 align="center">
+  <a href="https://prismalab-arm64.github.io/ECHO_OFF/">🌌 ACCEDER A LA SALA DE CONTACTO (LIVE APP) 🌌</a>
+</h2>
 
 ---
 
-## ⚙️ Encantamientos de Mainframe (Features)
+> *"Al igual que el polvo de las estrellas o las cenizas de la pólvora, tus palabras nacen, brillan en la pantalla, y se esparcen en el éter al segundo siguiente. No hay eco. No hay rastro. No hay nadie vigilando."*  
+> — *El Arquitecto del Lab.*
 
-### 🧿 Túnel Cuántico RAM-a-RAM (P2P Puro)
-Sin intermediarios, sin *backdoors*. Tu dispositivo y el receptor negocian a nivel binario un túnel directo (WebRTC) a través de la red global. Los paquetes de datos fluyen encriptados desde la memoria central hasta tu interlocutor; cuando el túnel colapsa de forma programada, los datos se vaporizan sin dejar rastros en el disco.
+## 👁️ EL MANIFIESTO DE LAS SOMBRAS
 
-### 🎭 Ilusión de Cristal Líquido (Frontend Stealth)
-Bajo la engañosa apariencia de una interfaz hipermoderna, estéril y minimalista (Meta/WhatsApp clone UI estéticamente construida bajo `#f0f2f5`), yace una Matrix imparable. Diseñada astutamente para que un observador casual o una cámara de vigilancia solo vea una charla inocente, ocultando el motor criptográfico en el `background`. 
+Sean bienvenidos a la **era del cero-rastro**. En un mundo donde todo es almacenado, catalogado y utilizado en tu contra, **ECHO_OFF** no es una aplicación tradicional. Es un conducto P2P subterráneo, una conexión invisible forjada puramente en los navegadores de dos entidades anónimas.  
 
-### ⏳ Hechizo de Cenizas (Garbage Collection Agresivo)
-Los *strings* de mensajes no tienen persistencia en la DOM. Cada variable de texto tiene un *Timeout* suicida atado a la consciencia de tu interlocutor. Una vez leído y respondido, las palabras anteriores son sobreescritas con "basura algorítmica" y destruidas. No hay recuperación forense posible.
-
-### 🛡️ Sigilo del Guardián Root (Anti-Cyborgs)
-Un intruso visual no robará tus metadatos. Hemos inyectado protecciones en el código raíz (`document.body.style.userSelect = 'none'`):
-- **Ceguera de Captura:** Desactivación de *Focus* - Si el navegador detecta que miras a otra ventana (intentos sutiles de *screenshot/screencast*), dispara una alarma de seguridad.
-- **Parálisis de Extracción:** Clic derecho, inspección, `Ctrl+C/X/P/S` y el Portapapeles del SO caen en una trampa de error (`e.preventDefault()`). Tus datos no salen de la bóveda.
-
-### 📜 Transferencia de Artefactos Obscuros (File & Voice P2P)
-Transfiere paquetes cifrados, *scripts*, o pergaminos digitales (hasta 20 MB) de extremo a extremo sin limitación gubernamental. Codifica tu propia voz a *base64* usando la API Nativa de MediaRecorder. Nada toca la nube, todo ocurre en la niebla.
+No usamos granjas de servidores. No tenemos bases de datos SQL sedientas de tus textos. Funciona bajo la premisa absoluta de **cifrado oscuro y conectividad volátil**. 
 
 ---
 
-## ⚡ Invocación del Sistema (Deployment)
+## 🛠️ INGENIERÍA 4.0: EL NÚCLEO
 
-El artefacto está diseñado para dos entidades únicas. Cualquier tercera conexión es *droppeada* por el firewall maestro.
+El sistema utiliza las más sofisticadas técnicas de WebRTC envueltas en la biblioteca P2P, saltando cortafuegos a través de nodos STUN distribuidos de Google. 
 
-1. **El Host (Invocador):** Inicializa *"Nueva Conversación"*. El sistema generará aleatoriamente un *Hash Token* (`ECHO_0x9A...`). Pásalo vía *Side-channel* a tu contacto seguro.
-2. **El Cliente (Resonante):** Ejecuta *"Unirse con Enlace"*. Pega el *Hash Token*.
-3. **El Handshake (Pacto):** El Invocador autoriza el intercambio de claves públicas. El mundo exterior queda *blackholed*.
+🔹 **Interconexión Tácita (Auto-Accept Protocol):** He liberado a la bestia de las ataduras anticuadas del DOM y la red. Ya no se sufren bloqueos de los módulos de seguridad de iOS/Android que detienen conexiones en segundo plano (Condiciones de Carrera aniquiladas). Si tienes la llave única, **estás dentro.**
 
-🚨 **EL PROTOCOLO FANTASMA [PANIC BUTTON]:** Si la puerta es derribada o tu terminal se ve comprometida, invoca el Botón de Pánico pulsando la tecla `ESC` 3 veces rápido. La pantalla crasheará los `scripts`, purgará los bucles, destruirá WebRTC y te redirigirá limpiamente. *Ghost mode: ON*.
+🔹 **Anti-Caché Inmortal:** Hemos inyectado versiones `vFINAL_NO_MERCY` en nuestro Service Worker (`sw.js`). Si el Laboratorio sube un parche, las versiones obsoletas en los navegadores del mundo son forzadas a autodestruirse al contacto. La sincronía es perfecta.
 
----
-
-## 💻 Grado de Conocimiento Root (Testing Setup)
-
-A los magos de la red oscura que deseen levantar los clústeres del artefacto en sus túneles de *localhost*:
-
-```bash
-# Invoca el Daemón de servidor espectral en Python:
-python -m http.server 8000
-
-# O compila a través de los nodos JS:
-npx http-server -p 8000
-```
-Entra a `http://localhost:8000`. Cifra tu mente.
+🔹 **Arquitectura Monocromática Fluida:** Hemos migrado todo de un oscuro "DOS-Matrix" a una limpia y soberbia interfaz que rivalizaría visualmente con Meta, utilizando tonos HSL y glassmorphism puro. El camuflaje perfecto para operar a plena luz del día.
 
 ---
 
-## ⚖️ El Pacto de Sombra (Disclaimer Ofensivo)
+## 🛡️ DEFENSA CONTRA LAS ARTES OSCURAS (SEGURIDAD)
 
-**ECHO_OFF** es un constructo conceptual de hiperprogramación. Una ilusión estructural diseñada por **PrismaLab** para estudiar y redefinir los métodos de conexión *Pura Client-Side API*. 
+No basta con ser invisible en la red; debes ser intocable en la pantalla física:
 
-No esperes piedad si confías secretos de Estado a una red ejecutándose en el sandbox inestable de tu navegador (`JavaScript`). Esta capa protege contra espionaje general de tráfico, ruteadores maliciosos e intermediarios, pero ningún algoritmo puede salvarte si un Mago Oscuro ha inyectado un *Keylogger* a nivel Kernel en tu CPU. Eres la línea final de tu propia seguridad.
-
-*Expect Us.*
+*   🔒 **Destrucción Volátil (Cronómetro Zero):** Los mensajes en tu pantalla son un espejismo. Al emitir tu próxima respuesta, el historial previo de tu interlocutor es purgado de la memoria VRAM simultáneamente. 
+*   🔒 **Escudo Cortafuego Copia/Corte:** Tu terminal desactiva a nivel kernel del navegador las API's del portapapeles. `Ctrl+C` está muerto. El menú contextual derecho ha sido borrado del plano del DOM. 
+*   🔒 **Alerta del Vigía (Anti-Screenshot):** Si un tercer agente desenfoca la ventana para robar información secreta usando Recortes, el Laboratorio detecta el cambio de estado de visibilidad instantáneamente.
+*   🔒 **Secuencia de Evacuación (Triple ESC):** Aborta misión inmediatamente oprimendo `ESC` tres veces. Esto borra la instancia del Peer, pulveriza el HTML de tu pantalla e inyecta una redirección instantánea forzosa.
 
 ---
 
-<div align="center">
-  
-**PrismaLab** | *El código es ley. El código deshace mundos.*  
-[Github: @PrismaLab-arm64](https://github.com/PrismaLab-arm64)
+## ⚡ ¿CÓMO CRUZAR EL PORTAL? (INSTRUCCIONES)
 
-</div>
+### 1. El Anfitrión (The Host)
+1. Navega a **[https://prismalab-arm64.github.io/ECHO_OFF/](https://prismalab-arm64.github.io/ECHO_OFF/)**.
+2. Presiona **"Nueva Conversación"**.
+3. El sistema invocará un conjuro matemático y generará el *"Cripto-Token"* único (ej. `ECHO_MMNV4YVD11D`).
+4. Entrégale esta llave a tu invitado por un medio externo seguro. No cierres la ventana.
+
+### 2. El Invitado (The Guest)
+1. Navega a **[https://prismalab-arm64.github.io/ECHO_OFF/](https://prismalab-arm64.github.io/ECHO_OFF/)**.
+2. Presiona **"Unirse con Enlace"**.
+3. Ingresa la llave otorgada por el Anfitrión.
+4. Presiona conectar. La **Autorización Tácita** quebrará cualquier barrera de red entre continentes y unirá los ecosistemas instantáneamente.
+
+---
+
+## 🧬 DETALLES CLÍNICOS Y TRANSFERENCIAS (Payloads)
+
+*   **Voz (Canal Analógico):** Grabación asíncrona WebM comprimiendo tus palabras en BLOB y transmitiéndolas a través del mismo puente WebRTC sin pasar por servidores HTTP convencionales.
+*   **Archivos (Payloads Locales):** Transforma cualquier documento hasta de 20MB en una cadena codificada base64 que viaja al vuelo. Si envías la información clasificada, viaja de nodo a nodo.
+
+---
+
+### *Desarrollado en las instalaciones PrismaLab-arm64 bajo el protocolo avanzado.*
+*"Lo que sucede en ECHO_OFF, ni siquiera queda en ECHO_OFF."*

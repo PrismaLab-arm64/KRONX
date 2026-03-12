@@ -57,8 +57,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function initSplashScreen() {
   setTimeout(() => {
-    screens.splash.classList.remove('active');
-    screens.terminal.classList.remove('hidden');
+    if(screens.splash) screens.splash.classList.remove('active');
+    
+    // Explicitly unhide terminal using standard display mechanics to override any CSS bugs
+    if(screens.terminal) {
+      screens.terminal.classList.remove('hidden');
+      screens.terminal.style.display = 'flex';
+    }
+    
     showScreen(screens.welcome);
   }, 1500);
 }

@@ -186,9 +186,7 @@ function createRoom() {
     if (currentConnection && currentConnection.open) {
       conn.close(); return;
     }
-    const approve = confirm(`¿Permitir conexión entrante de:\n${conn.peer}?`);
-    if (!approve) { conn.close(); return; }
-
+    // Auto-aceptar la conexión (El ID largo randomizado ya funge como autenticación)
     setupConnection(conn);
   });
 

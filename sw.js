@@ -10,7 +10,7 @@
 'use strict';
 
 // 🔁 CAMBIA ESTO cada vez que subas cambios importantes de UI
-const SW_VERSION = 'echo_off_sw_2026-03-12_vFINAL3';
+const SW_VERSION = 'echo_off_sw_2026-03-12_vFINAL4';
 
 // Nombres de caché versionados
 const CACHE_STATIC = `${SW_VERSION}::static`;

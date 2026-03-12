@@ -164,7 +164,10 @@ function generateUniqueId() {
 }
 
 function initPeerOptions() {
-  return { config: { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:stun1.l.google.com:19302' }] } };
+  return { 
+    debug: 2,
+    config: { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:stun1.l.google.com:19302' }] } 
+  };
 }
 
 function createRoom() {
@@ -177,12 +180,14 @@ function createRoom() {
   peer = new Peer(myPeerId, initPeerOptions());
   
   peer.on('open', (id) => {
+    console.log('[DEBUG] Peer open on HOST. Assigned ID:', id);
     isHost = true;
     if (UI.roomIdInput) UI.roomIdInput.value = id;
     updateStatus('ESPERANDO CONEXIÓN...', 'warning');
   });
 
   peer.on('connection', (conn) => {
+    console.log('[DEBUG] Incoming connection event from peer:', conn.peer);
     if (currentConnection && currentConnection.open) {
       conn.close(); return;
     }
@@ -190,7 +195,10 @@ function createRoom() {
     setupConnection(conn);
   });
 
-  peer.on('error', (err) => systemAlert('Error al crear sala.', 'error'));
+  peer.on('error', (err) => {
+    console.error('[DEBUG] Peer hosting error:', err);
+    systemAlert('Error al crear sala.', 'error');
+  });
 }
 
 function connectToPeer() {
@@ -201,22 +209,34 @@ function connectToPeer() {
   peer = new Peer(myPeerId, initPeerOptions());
   
   peer.on('open', () => {
+    console.log('[DEBUG] Peer open on CLIENT. Attempting connection to target:', targetId);
     updateStatus('CONECTANDO...', 'warning');
-    const conn = peer.connect(targetId);
+    const conn = peer.connect(targetId, { reliable: true });
     setupConnection(conn);
   });
 
-  peer.on('error', (err) => systemAlert('No se pudo conectar al peer.', 'error'));
+  peer.on('error', (err) => {
+    console.error('[DEBUG] Peer connecting error:', err);
+    systemAlert('No se pudo conectar al peer.', 'error');
+  });
 }
 
 function setupConnection(conn) {
+  console.log('[DEBUG] Setting up local connection object for:', conn.peer);
   currentConnection = conn;
   
-  conn.on('open', () => {
+  const handleOpen = () => {
+    console.log('[DEBUG] Connection formally OPENED dynamically with:', conn.peer);
     showScreen(screens.chat);
     if (UI.chatPeerId) UI.chatPeerId.textContent = isHost ? conn.peer : conn.peer;
     updateStatus('EN LÍNEA', 'success');
-  });
+  };
+
+  if (conn.open) {
+    handleOpen();
+  } else {
+    conn.on('open', handleOpen);
+  }
 
   conn.on('data', (data) => {
     try {

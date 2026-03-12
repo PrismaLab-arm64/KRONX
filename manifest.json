@@ -1,0 +1,25 @@
+{
+  "name": "ECHO_OFF",
+  "short_name": "ECHO_OFF",
+  "description": "ECHO_OFF PWA - Secure Communications System",
+  "start_url": "./?v=20260207_01",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#e9e9e9",
+  "theme_color": "#e9e9e9",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

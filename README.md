@@ -4,7 +4,7 @@
 # 👁️ ECHO_OFF : THE GENESIS PROTOCOL
 **`[ SYSTEM OVERRIDE // PROTOCOLO ZERO-TRACE INCIADO ]`**
 
-*We are Legion. Lo que se compila en las sombras, permanece en la RAM.*
+*We are Legion. Lo que se compila en las sombras, No apermanece en ninguna RAM.*
 
 ![Version](https://img.shields.io/badge/Build-3.0.0_Codex.Anon-000000?style=for-the-badge&logo=matrix)
 ![Status](https://img.shields.io/badge/Uplink-Activo__Ghost-0084ff?style=for-the-badge)

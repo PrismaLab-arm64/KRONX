@@ -1,5 +1,5 @@
 /* =========================================================
-   ECHO_OFF — Service Worker (SAFE UPDATE + PWA CACHE FIX)
+   ECHO CHAT — Service Worker (SAFE UPDATE + PWA CACHE FIX)
    Objetivo:
    - Evitar que el cache congele tus cambios de UI
    - Mantener PWA offline-friendly sin romper app.js
@@ -10,7 +10,7 @@
 'use strict';
 
 // 🔁 CAMBIA ESTO cada vez que subas cambios importantes de UI
-const SW_VERSION = 'echo_off_sw_2026-03-12_vDELTA_FORCE_V5.1_FINAL';
+const SW_VERSION = 'echo_chat_sw_2026-03-13_vDELTA_FORCE_V5.1_FINAL';
 
 // Nombres de caché versionados
 const CACHE_STATIC = `${SW_VERSION}::static`;
@@ -21,7 +21,7 @@ const APP_SHELL = [
   './',
   './index.html',
   './style.css',
-  './delta-v4.js',
+  './delta-v5.js',
   './peerjs.min.js',
   './manifest.json',
   './icon-192.png',

@@ -1,7 +1,7 @@
 {
-  "name": "ECHO_OFF",
-  "short_name": "ECHO_OFF",
-  "description": "ECHO_OFF PWA - Secure Communications System",
+  "name": "ECHO CHAT",
+  "short_name": "ECHO CHAT",
+  "description": "ECHO CHAT PWA - Secure Communications System",
   "start_url": "./?v=20260207_01",
   "scope": "./",
   "display": "standalone",

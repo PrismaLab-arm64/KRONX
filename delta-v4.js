@@ -166,7 +166,7 @@ function showScreen(screen) {
 function generateUniqueId() {
   const rs = crypto.getRandomValues(new Uint32Array(2));
   const t = Date.now().toString(36);
-  return `ECHO_${t}${rs[0].toString(36)}`.toUpperCase().substring(0, 16);
+  return `ECHOCHAT_${t}${rs[0].toString(36)}`.toUpperCase().substring(0, 16);
 }
 
 function initPeerOptions() {
@@ -198,7 +198,7 @@ function createRoom() {
 
 function connectToPeer() {
   const targetId = UI.peerIdInput ? UI.peerIdInput.value.trim().toUpperCase() : '';
-  if (!targetId || !targetId.startsWith('ECHO_')) return;
+  if (!targetId || !targetId.startsWith('ECHOCHAT_')) return;
 
   myPeerId = generateUniqueId();
   if (peer) peer.destroy();

@@ -114,6 +114,11 @@ function setupEventListeners() {
   if (UI.btnRegenerateId) UI.btnRegenerateId.onclick = () => { destroyPeer(); createRoom(); };
   if (UI.btnSend) UI.btnSend.onclick = sendMessage;
   if (UI.messageInput) {
+    UI.messageInput.oninput = () => {
+      const hasText = UI.messageInput.value.trim().length > 0;
+      if (UI.btnSend) UI.btnSend.classList.toggle('hidden', !hasText);
+      if (UI.btnRecord) UI.btnRecord.classList.toggle('hidden', hasText);
+    };
     UI.messageInput.onkeypress = (e) => { if (e.key === 'Enter') sendMessage(); };
   }
   if (UI.btnUploadFile) UI.btnUploadFile.onclick = () => UI.fileInput.click();
@@ -135,7 +140,7 @@ function showScreen(screen) {
    P2P LOGIC
    ============================================= */
 function generateUniqueId() {
-  return `ECHO_${Date.now().toString(36).toUpperCase()}_${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+  return `ECHOCHAT_${Date.now().toString(36).toUpperCase()}_${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
 }
 
 function createRoom() {
@@ -144,7 +149,18 @@ function createRoom() {
   if (UI.roomIdInput) UI.roomIdInput.value = "CONNECTING...";
   
   if (peer) peer.destroy();
-  peer = new Peer(myPeerId, { debug: 2, config: { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] } });
+  peer = new Peer(myPeerId, { 
+    debug: 2, 
+    config: { 
+      iceServers: [
+        { urls: 'stun:stun.l.google.com:19302' },
+        { urls: 'stun:stun1.l.google.com:19302' },
+        { urls: 'stun:stun2.l.google.com:19302' },
+        { urls: 'stun:stun3.l.google.com:19302' },
+        { urls: 'stun:stun4.l.google.com:19302' }
+      ] 
+    } 
+  });
   
   peer.on('open', (id) => {
     isHost = true;
@@ -158,13 +174,27 @@ function createRoom() {
 
 function connectToPeer() {
   const targetId = UI.peerIdInput.value.trim().toUpperCase();
-  if (!targetId.startsWith('ECHO_')) return;
+  if (!targetId.startsWith('ECHOCHAT_')) return;
   myPeerId = generateUniqueId();
   if (peer) peer.destroy();
-  peer = new Peer(myPeerId, { debug: 2 });
+  peer = new Peer(myPeerId, { 
+    debug: 2,
+    config: { 
+      iceServers: [
+        { urls: 'stun:stun.l.google.com:19302' },
+        { urls: 'stun:stun1.l.google.com:19302' },
+        { urls: 'stun:stun2.l.google.com:19302' },
+        { urls: 'stun:stun3.l.google.com:19302' }
+      ] 
+    }
+  });
   peer.on('open', () => {
     updateStatus('ENLAZANDO...', 'warning');
-    setupConnection(peer.connect(targetId));
+    const conn = peer.connect(targetId, {
+      reliable: true,
+      metadata: { version: '5.1' }
+    });
+    setupConnection(conn);
   });
 }
 
@@ -221,6 +251,8 @@ function sendMessage() {
   currentConnection.send(JSON.stringify({ type: 'TEXT', text }));
   appendMessage(text, 'sent');
   UI.messageInput.value = '';
+  if (UI.btnSend) UI.btnSend.classList.add('hidden');
+  if (UI.btnRecord) UI.btnRecord.classList.remove('hidden');
 }
 
 function appendMessage(text, type) {

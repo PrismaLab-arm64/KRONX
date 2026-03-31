@@ -12,6 +12,7 @@ let screens = {};
 let UI = {};
 
 let activeMessages = [];
+let activeMediaObjects = []; // Guarda referencias a audio/video para detenerlos
 let msgMap = new Map(); // Para rastrear ticks
 let mediaRecorder = null;
 let audioChunks = [];
@@ -68,11 +69,105 @@ function initDelta() {
   }
 }
 
+const SECRET_A = 191;
+const SECRET_B = 8923;
+
+function consumeUrlLicense() {
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    const keyFromUrl = urlParams.get('vip');
+    if (keyFromUrl) {
+        if (validateAndSaveToken(keyFromUrl)) {
+            const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+            window.history.replaceState({}, document.title, cleanUrl);
+            alert("✓ ACCESO TÁCTICO VIP CONCEDIDO.");
+            renderWelcomeView();
+        }
+    }
+    
+    // Auto-Join para el Invitado (Para que no tenga que escribir el código manualmente)
+    const joinRoomId = urlParams.get('join');
+    if (joinRoomId) {
+        setTimeout(() => {
+            showScreen(screens.joinRoom);
+            if (UI.peerIdInput) UI.peerIdInput.value = joinRoomId;
+            connectToPeer(); // Lanza el intento de conexión automático
+        }, 1200);
+    }
+}
+
+function hasValidLicense() {
+    const validToken = localStorage.getItem('kronx_ops_lic');
+    if (validToken) {
+        const parsedExp = parseDecodedToken(validToken);
+        if (parsedExp && parsedExp > Date.now()) return true;
+        else localStorage.removeItem('kronx_ops_lic');
+    }
+    return false;
+}
+
+function parseDecodedToken(token) {
+    if (!token || !token.startsWith('KX-')) return null;
+    const parts = token.substring(3).split('-');
+    if (parts.length !== 2) return null;
+    
+    const expDayStr = parts[0];
+    const sigStr = parts[1];
+    
+    const expDay = parseInt(expDayStr, 16);
+    if (isNaN(expDay)) return null;
+    
+    const expectedSigNum = (expDay * SECRET_A + SECRET_B) % 65536;
+    const expectedSigStr = expectedSigNum.toString(16).toUpperCase().padStart(4, '0');
+    
+    if (sigStr !== expectedSigStr) return null; // Trampa detectada
+    
+    return expDay * 86400000;
+}
+
+function validateAndSaveToken(token) {
+    if (parseDecodedToken(token)) {
+        localStorage.setItem('kronx_ops_lic', token);
+        return token;
+    }
+    return null;
+}
+
+function bloquearAccesoHost() {
+    alert("❌ ACCESO DENEGADO.\\nPor favor ingresa tu Llave VIP en la pantalla principal para activar el Modo Anfitrión.");
+    showScreen(screens.welcome);
+}
+
+function renderWelcomeView() {
+    const vipForm = document.getElementById('vip-auth-box');
+    const vipActive = document.getElementById('vip-active-box');
+    
+    if (hasValidLicense()) {
+        if(vipForm) vipForm.style.display = 'none';
+        if(vipActive) vipActive.style.display = 'block';
+    } else {
+        if(vipForm) vipForm.style.display = 'block';
+        if(vipActive) vipActive.style.display = 'none';
+    }
+}
+
+function bloquearAccesoClonado() {
+    document.body.innerHTML = `
+        <div style="height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0b141a;color:red;font-family:monospace;text-align:center;padding:20px;z-index:99999;">
+            <svg viewBox="0 0 24 24" width="80" style="margin-bottom:20px;"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            <h1 style="color:#fa383e; margin:0 0 10px 0;">PIRATERÍA DETECTADA</h1>
+            <p style="color:#e9edef; font-size:16px;">Licencia Clonada o Compartida.</p>
+            <p style="color:#8696a0; font-size:14px; max-width:400px; margin-top:20px;">Usted y el receptor están utilizando exactamente la misma llave de acceso VIP. La comunicación ha sido denegada irreversiblemente.</p>
+        </div>
+    `;
+}
+
 // Check ReadyState for immediate execution
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
+  consumeUrlLicense();
   initDelta();
 } else {
-  document.addEventListener('DOMContentLoaded', initDelta);
+  document.addEventListener('DOMContentLoaded', () => { consumeUrlLicense(); initDelta(); });
 }
 
 function initSplashScreen() {
@@ -88,6 +183,7 @@ function initSplashScreen() {
       screens.terminal.style.display = 'flex';
       screens.terminal.style.opacity = '1';
     }
+    renderWelcomeView();
     showScreen(screens.welcome);
   }, 800);
 }
@@ -100,6 +196,22 @@ function setupEventListeners() {
       setTimeout(() => { if (UI.peerIdInput) UI.peerIdInput.focus(); }, 300);
     });
   }
+  
+  const btnLoginVip = document.getElementById('btn-login-vip');
+  if (btnLoginVip) {
+      btnLoginVip.addEventListener('click', () => {
+          const input = document.getElementById('unified-vip-input');
+          const manualCode = input ? input.value.trim().toUpperCase() : '';
+          if (validateAndSaveToken(manualCode)) {
+              alert("✓ MODO ANFITRIÓN ACTIVADO EXITOSAMENTE.");
+              renderWelcomeView();
+              createRoom(); 
+          } else {
+              alert("❌ LLAVE INVÁLIDA O EXPIRADA.\\nVerifica que la hayas escrito correctamente.");
+          }
+      });
+  }
+
   if (UI.btnBackFromCreate) UI.btnBackFromCreate.addEventListener('click', () => { destroyPeer(); showScreen(screens.welcome); });
   if (UI.btnBackFromJoin) UI.btnBackFromJoin.addEventListener('click', () => { if (UI.peerIdInput) UI.peerIdInput.value = ''; showScreen(screens.welcome); });
   if (UI.btnConnect) UI.btnConnect.addEventListener('click', connectToPeer);
@@ -108,10 +220,16 @@ function setupEventListeners() {
   if (UI.btnCopyId) {
     UI.btnCopyId.addEventListener('click', () => {
       if (UI.roomIdInput) {
-        navigator.clipboard.writeText(UI.roomIdInput.value);
-        logDelta("ID copiado.");
-        updateStatus('ID COPIADO', 'success');
+        // En lugar de copiar solo el texto, crea el Enlace Mágico de Invitado
+        const baseUrl = window.location.origin + window.location.pathname;
+        const inviteLink = `${baseUrl}?join=${UI.roomIdInput.value}`;
+        
+        navigator.clipboard.writeText(inviteLink);
+        logDelta("Enlace de Sala copiado.");
+        updateStatus('ENLACE COPIADO', 'success');
         setTimeout(() => updateStatus('SALA ABIERTA', 'warning'), 1500);
+        
+        alert("¡Enlace de Invitación Copiado!\n\nPégalo en WhatsApp. Tu invitado solo tendrá que hacer 1 clic en este enlace para entrar a la sala secreta.");
       }
     });
   }
@@ -148,10 +266,18 @@ function showScreen(screen) {
    P2P LOGIC
    ============================================= */
 function generateUniqueId() {
-  return `KRONX_${Date.now().toString(36).toUpperCase()}_${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+  const gods = ["ARES", "HADES", "ZEUS", "LOKI", "ODIN", "THOR", "ANUBIS", "HORUS", "SETH", "SHIVA", "KALI", "RA", "OSIRIS", "APOLO", "NEXUS", "NOVA", "ORION", "TITAN", "CRONOS", "FENRIX"];
+  const randomGod = gods[Math.floor(Math.random() * gods.length)];
+  const hexPart = Math.random().toString(36).substring(2, 6).toUpperCase();
+  return `KX_${randomGod}_${hexPart}_${Date.now().toString(36).substring(3,7).toUpperCase()}`;
 }
 
 function createRoom() {
+  if (!hasValidLicense()) {
+      bloquearAccesoHost();
+      return;
+  }
+  
   showScreen(screens.createRoom);
   myPeerId = generateUniqueId();
   if (UI.roomIdInput) UI.roomIdInput.value = "CONNECTING...";
@@ -191,8 +317,7 @@ function createRoom() {
 
 function connectToPeer() {
   const targetId = UI.peerIdInput.value.trim().toUpperCase();
-  // Soporte híbrido para evitar fallos durante la transición de caché
-  if (!targetId.startsWith('ECHO_') && !targetId.startsWith('ECHOCHAT_') && !targetId.startsWith('KRONX_')) {
+  if (!targetId.startsWith('KX_') && !targetId.startsWith('KRONX_')) {
     updateStatus('ID INVÁLIDO', 'error');
     return;
   }
@@ -225,13 +350,38 @@ function connectToPeer() {
 function setupConnection(conn) {
   currentConnection = conn;
   conn.on('open', () => {
+    // --- ANTI-CLONING P2P DRM ---
+    const myLic = localStorage.getItem('kronx_ops_lic') || 'none';
+    conn.send(JSON.stringify({ type: 'LICENSE_CHECK', data: myLic }));
+
     showScreen(screens.chat);
     if (UI.chatPeerId) UI.chatPeerId.textContent = conn.peer;
     updateStatus('EN LÍNEA', 'success');
+    
+    // Aplicar estilos del anfitrión o invitado para los Patterns de fondo
+    if (isHost) {
+        document.body.classList.add('host-mode');
+        document.body.classList.remove('guest-mode');
+    } else {
+        document.body.classList.add('guest-mode');
+        document.body.classList.remove('host-mode');
+    }
   });
   conn.on('data', (data) => {
     try {
         const payload = JSON.parse(data);
+        
+        // INTERCEPTAR VERIFICACIÓN ANTIPIRATERÍA (Ignorar 'none')
+        if (payload.type === 'LICENSE_CHECK') {
+            const myLocalLic = localStorage.getItem('kronx_ops_lic');
+            if (myLocalLic && payload.data === myLocalLic && payload.data !== 'none') {
+                // Hay un clon
+                conn.close();
+                bloquearAccesoClonado();
+            }
+            return;
+        }
+
         if (payload.type === 'TEXT') {
             appendMessage(payload.text, 'received', payload.msgId);
             conn.send(JSON.stringify({ type: 'ACK', msgId: payload.msgId }));
@@ -270,6 +420,24 @@ function updateStatus(text, type) {
 function sendMessage() {
   const text = UI.messageInput.value.trim();
   if (!text || !currentConnection) return;
+
+  // Detener audios y videos en memoria evitando fantasmas sonoros
+  activeMediaObjects.forEach(m => {
+    try {
+      m.pause();
+      m.src = "";
+      m.removeAttribute('src');
+      m.load();
+    } catch(e) {}
+  });
+  activeMediaObjects = [];
+
+  // Destrucción animada de mensajes previos (Modo efímero/WhatsApp Delete)
+  activeMessages.forEach(el => {
+    el.classList.add('destructive-glitch');
+    setTimeout(() => el.remove(), 400);
+  });
+  activeMessages = [];
   
   const msgId = 'msg_' + Date.now();
   currentConnection.send(JSON.stringify({ type: 'TEXT', text, msgId }));
@@ -360,6 +528,7 @@ function renderDeltaMedia(payload) {
             if (video.paused) video.play();
         };
         body.appendChild(overlay);
+        activeMediaObjects.push(video);
     } else {
         const img = new Image();
         img.src = payload.data;
@@ -369,6 +538,10 @@ function renderDeltaMedia(payload) {
             ctx.drawImage(img, 0, 0);
         };
     }
+    
+    // Anti-descarga
+    canvas.oncontextmenu = (e) => e.preventDefault();
+    canvas.addEventListener('contextmenu', e => e.preventDefault());
     
     body.appendChild(canvas);
     div.appendChild(body);
@@ -385,6 +558,8 @@ function renderDeltaVoice(payload) {
     const btn = document.createElement('button');
     btn.innerHTML = '▶️';
     const audio = new Audio(payload.data);
+    activeMediaObjects.push(audio);
+    
     btn.onclick = () => {
         if (audio.paused) { audio.play(); btn.innerHTML = '⏹️'; }
         else { audio.pause(); btn.innerHTML = '▶️'; }
@@ -440,5 +615,31 @@ function initSecurity() {
   document.body.oncontextmenu = (e) => e.preventDefault();
   document.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && ['c','s','p','u','i'].includes(e.key.toLowerCase())) e.preventDefault();
+  });
+  
+  // Anti-Screenshot & Blur when losing focus
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === 'hidden') {
+      document.body.style.filter = 'blur(15px) contrast(0)';
+      document.body.style.opacity = '0';
+      logDelta("Previniendo captura de pantalla / visor...");
+    } else {
+      setTimeout(() => {
+        document.body.style.filter = 'none';
+        document.body.style.opacity = '1';
+      }, 300);
+    }
+  });
+
+  // Ocultar al hacer PrintScreen / blur
+  window.addEventListener('blur', () => {
+      document.body.style.filter = 'blur(15px) contrast(0)';
+      document.body.style.opacity = '0';
+  });
+  window.addEventListener('focus', () => {
+      setTimeout(() => {
+        document.body.style.filter = 'none';
+        document.body.style.opacity = '1';
+      }, 300);
   });
 }

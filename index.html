@@ -19,7 +19,7 @@
   
   <!-- Fallback CSS load -->
   <style>
-    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #0b141a; margin: 0; padding: 0; height: 100vh; height: 100dvh; overflow: hidden; display: flex; flex-direction: column; color: #e9edef; }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #eceff1; margin: 0; padding: 0; height: 100vh; height: 100dvh; overflow: hidden; display: flex; flex-direction: column; color: #263238; }
     .hidden { display: none !important; }
   </style>
   <script>
@@ -92,13 +92,28 @@
       </div>
       
       <div class="welcome-actions">
-        <button id="btn-create-room" class="btn-primary btn-large">
-          <svg viewBox="0 0 24 24" class="btn-icon"><path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-          Nueva Conversación
-        </button>
-        <button id="btn-join-room" class="btn-secondary btn-large">
+        
+        <!-- Módulo de Login (Solo visible si no hay licencia) -->
+        <div id="vip-auth-box" style="margin-bottom: 20px; text-align: left; background: #202c33; padding: 15px; border-radius: 8px; border-left: 4px solid #f5a623;">
+            <p style="color:#f5a623; margin:0 0 10px 0; font-size:13px; font-weight:bold;">MODO ANFITRIÓN:</p>
+            <input type="text" id="unified-vip-input" placeholder="Pega tu Llave VIP (KXX-XXXX)" style="width: 100%; padding: 12px; border-radius: 8px; border: none; background: #111b21; color: #d1d7db; margin-bottom: 10px; font-family: monospace; font-size: 14px; text-transform: uppercase;">
+            <button id="btn-login-vip" class="btn-primary-small" style="width: 100%; justify-content:center; background:#f5a623; color:#0b141a; font-weight:bold; cursor:pointer; padding: 12px; border-radius: 8px; border: none;">
+                Activar Acceso VIP
+            </button>
+        </div>
+
+        <!-- Módulo Activo (Visible si ya está autorizado) -->
+        <div id="vip-active-box" style="display:none; margin-bottom: 20px;">
+           <p style="color:#00a884; font-weight:bold; font-size:14px; text-align:center; margin-bottom:15px; letter-spacing: 1px;">✓ ANFITRIÓN AUTORIZADO</p>
+           <button id="btn-create-room" class="btn-primary btn-large" style="width:100%;">
+             <svg viewBox="0 0 24 24" class="btn-icon"><path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+             Nueva Conversación Privada
+           </button>
+        </div>
+
+        <button id="btn-join-room" class="btn-secondary btn-large" style="width:100%;">
           <svg viewBox="0 0 24 24" class="btn-icon"><path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-          Unirse con Enlace
+          Invitado: Unirse con Código
         </button>
       </div>
 

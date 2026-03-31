@@ -6,15 +6,15 @@
 
 ## 🔗 Enlaces Operativos (Guarda estos accesos)
 
-> **⚠️ IMPORTANTE:** Debes reemplazar `[TU-USUARIO]` y `[TU-REPOSITORIO]` por los datos reales de tu enlace de GitHub Pages.
+> **✅ ENLACES ACTUALIZADOS Y LISTOS:** Estos son tus enlaces oficiales y permanentes de operación en la red de GitHub Pages.
 
 📍 **La Plataforma (Para tus clientes / público):**
-`https://[TU-USUARIO].github.io/KRONX-main/`
-*(Este es el enlace de la aplicación general. Aquí entran tanto Anfitriones VIP como Invitados).*
+`https://PrismaLab-arm64.github.io/KRONX/`
+*(Este es el enlace de la aplicación principal. Cópialo y úsalo para pruebas o demostraciones).*
 
 🔑 **Bóveda del Administrador (SOLO PARA TI):**
-`https://[TU-USUARIO].github.io/KRONX-main/keygen-secret.html`
-*(Panel secreto estático. Ábrelo solo tú para fabricar y cobrar las licencias VIP que venderás).*
+`https://PrismaLab-arm64.github.io/KRONX/keygen-secret.html`
+*(Panel secreto estático. Ábrelo desde este enlace oficial para fabricar, administrar y asegurar el cobro de tus licencias VIP en 2 clics).*
 
 ---
 
